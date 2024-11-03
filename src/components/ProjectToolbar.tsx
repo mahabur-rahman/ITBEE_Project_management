@@ -1,25 +1,31 @@
 import { useState } from "react";
-import { Modal, Input, Form, Button, Select } from "antd";
+import { Modal, Input, Form, Button, Select, message } from "antd";
 import { TaskFormValues } from "../interface/project.interface";
 import { projects } from "../data/data";
-
 
 const { Option } = Select;
 
 const ProjectToolbar = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<string | undefined>(undefined);
 
   const showModal = () => {
+    if (!selectedProject) {
+      message.error("Please select a project first!");
+      return;
+    }
     setIsModalVisible(true);
   };
 
   const handleOk = (values: TaskFormValues) => {
-    console.log("Task added:", values);
+    console.log("Task added:", { ...values, project: selectedProject });
     setIsModalVisible(false);
+    setSelectedProject(undefined); // Reset selected project after submission
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    setSelectedProject(undefined); // Reset selected project on cancel
   };
 
   return (
@@ -27,7 +33,12 @@ const ProjectToolbar = () => {
       <div className="mb-4 flex justify-between items-center">
         <data></data>
         <div>
-          <Select placeholder="Select a Project" className="w-60 mx-4">
+          <Select 
+            placeholder="Select a Project" 
+            className="w-60 mx-4" 
+            onChange={(value) => setSelectedProject(value)}
+            value={selectedProject} // Set value to selectedProject
+          >
             {projects.map((project) => (
               <Option key={project.id} value={project.name}>
                 {project.name}
@@ -105,7 +116,11 @@ const ProjectToolbar = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button 
+              type="primary" 
+              htmlType="submit"
+              disabled={!selectedProject} // Disable button if no project is selected
+            >
               Add Task
             </Button>
           </Form.Item>
