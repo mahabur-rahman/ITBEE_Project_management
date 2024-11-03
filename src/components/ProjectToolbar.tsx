@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal, Input, Form, Button, Select, message } from "antd";
 import { TaskFormValues } from "../interface/project.interface";
 import { projects } from "../data/data";
@@ -8,6 +8,15 @@ const { Option } = Select;
 const ProjectToolbar = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProject, setSelectedProject] = useState<string | undefined>(undefined);
+  const [localTasks, setLocalTasks] = useState<any[]>([]); // State to hold tasks from local storage
+
+  useEffect(() => {
+    // Load tasks from local storage
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+      setLocalTasks(JSON.parse(savedTasks));
+    }
+  }, []);
 
   const showModal = () => {
     if (!selectedProject) {
@@ -18,7 +27,14 @@ const ProjectToolbar = () => {
   };
 
   const handleOk = (values: TaskFormValues) => {
-    console.log("Task added:", { ...values, project: selectedProject });
+    const newTask = { ...values, project: selectedProject, id: Date.now() }; // Create a new task with a unique ID
+    const updatedTasks = [...localTasks, newTask]; // Add the new task to the existing tasks
+
+    // Save updated tasks to local storage
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    setLocalTasks(updatedTasks); // Update the local state
+    console.log("Task added:", newTask);
+
     setIsModalVisible(false);
     setSelectedProject(undefined); // Reset selected project after submission
   };
@@ -81,9 +97,10 @@ const ProjectToolbar = () => {
             rules={[{ required: true, message: "Please select a status!" }]}
           >
             <Select placeholder="Select task status">
-              <Option value="Pending">Pending</Option>
+              <Option value="To Do">To Do</Option>
               <Option value="In Progress">In Progress</Option>
               <Option value="Completed">Completed</Option>
+              <Option value="Review">Review</Option>
             </Select>
           </Form.Item>
 
