@@ -1,10 +1,20 @@
-// Define the type for a project
+export interface TaskType {
+  id: number;
+  name: string;
+  description: string;
+  status: string;
+  priority: string;
+  dueDate: string;
+  assignedUser: string;
+}
+
 export interface ProjectType {
   id: number;
   name: string;
   description: string;
-  budget: number;
-  startDate: string; // You might want to use Date type if you're handling date objects
-  endDate: string;   // Same here
   status: string;
+  budget: string;
+  startDate: string;
+  endDate: string;
+  tasks: TaskType[];
 }
