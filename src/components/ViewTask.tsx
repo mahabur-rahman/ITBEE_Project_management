@@ -64,6 +64,18 @@ const ViewTasks: React.FC = () => {
               <p className="text-gray-600">
                 <strong>Description:</strong> {task.description}
               </p>
+              <p className="text-gray-600">
+                <strong>Status:</strong> {task.status}
+              </p>
+              <p className="text-gray-600">
+                <strong>Priority:</strong> {task.priority}
+              </p>
+              <p className="text-gray-600">
+                <strong>Due Date:</strong> {task.dueDate}
+              </p>
+              <p className="text-gray-600">
+                <strong>Assigned User:</strong> {task.assignedUser}
+              </p>
             </div>
           ) : (
             <p className="mt-4 text-red-600">No task found with ID {taskId}.</p>
