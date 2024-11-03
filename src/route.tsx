@@ -1,4 +1,7 @@
+import NotFound from "./common/NotFound";
+import Project from "./components/Project";
 
 export const routes = [
-  { path: "/", element: <p>dsfffffffffffffffffffffffffff</p> },
+  { path: "/", element: <Project /> },
+  { path: "/*", element: <NotFound /> },
 ];
