@@ -18,3 +18,13 @@ export interface ProjectType {
   endDate: string;
   tasks: TaskType[];
 }
+
+
+export interface TaskFormValues {
+  taskName: string;
+  taskDescription: string;
+  status: string;
+  dueDate: string; 
+  assignedUser: string;
+  priority: string;
+}
