@@ -40,7 +40,7 @@ const Project = () => {
 
         <div className="mt-4">
           <Collapse>
-            {projects.map((project: ProjectType) => (
+            {projects?.map((project: ProjectType) => (
               <Panel header={project.name} key={project.id}>
                 <div className="p-4">
                   {project.tasks.length > 0 ? (
@@ -80,7 +80,7 @@ const Project = () => {
                                 className="text-blue-500 cursor-pointer"
                                 title="View Task"
                                 onClick={() =>
-                                  navigate("/view-task", { state: { task } })
+                                  navigate(`/view-task/${task.id}`) 
                                 }
                               />
                               <FaEdit
