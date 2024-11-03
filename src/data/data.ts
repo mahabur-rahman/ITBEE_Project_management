@@ -14,7 +14,7 @@ export const projects: ProjectType[] = [
         id: 1,
         name: "Design Mockups",
         description: "Create mockups for the new design.",
-        status: "In Progress",
+        status: "In Progress", // Changed to "In Progress"
         priority: "High",
         dueDate: "2024-02-15",
         assignedUser: "John Doe",
@@ -23,7 +23,7 @@ export const projects: ProjectType[] = [
         id: 2,
         name: "Develop Frontend",
         description: "Implement the frontend using React.",
-        status: "Pending",
+        status: "Todo", // Changed to "Todo"
         priority: "High",
         dueDate: "2024-04-01",
         assignedUser: "Jane Smith",
@@ -43,7 +43,7 @@ export const projects: ProjectType[] = [
         id: 1,
         name: "Market Research",
         description: "Conduct market research for the product.",
-        status: "Pending",
+        status: "In Progress", // Remains "In Progress"
         priority: "Medium",
         dueDate: "2024-08-15",
         assignedUser: "Alice Johnson",
@@ -52,7 +52,7 @@ export const projects: ProjectType[] = [
         id: 2,
         name: "Develop Backend",
         description: "Set up the backend API.",
-        status: "Pending",
+        status: "Todo", // Changed to "Todo"
         priority: "High",
         dueDate: "2024-09-30",
         assignedUser: "Bob Brown",
@@ -72,7 +72,7 @@ export const projects: ProjectType[] = [
         id: 1,
         name: "Create User Stories",
         description: "Draft user stories for the application.",
-        status: "Completed",
+        status: "Completed", // Changed to "Completed"
         priority: "Medium",
         dueDate: "2024-09-10",
         assignedUser: "Emily White",
@@ -81,7 +81,7 @@ export const projects: ProjectType[] = [
         id: 2,
         name: "UI Testing",
         description: "Perform UI testing on the application.",
-        status: "Pending",
+        status: "Review", // Changed to "Review"
         priority: "Low",
         dueDate: "2025-01-15",
         assignedUser: "Charlie Green",
@@ -101,7 +101,7 @@ export const projects: ProjectType[] = [
         id: 1,
         name: "Finalize Requirements",
         description: "Finalize requirements with the stakeholders.",
-        status: "Pending",
+        status: "Todo", // Changed to "Todo"
         priority: "High",
         dueDate: "2024-08-01",
         assignedUser: "David Black",
@@ -121,7 +121,7 @@ export const projects: ProjectType[] = [
         id: 1,
         name: "Define Scope",
         description: "Define the project scope and objectives.",
-        status: "Pending",
+        status: "Todo", // Changed to "Todo"
         priority: "Medium",
         dueDate: "2024-10-15",
         assignedUser: "Sarah Connor",
@@ -141,7 +141,7 @@ export const projects: ProjectType[] = [
         id: 1,
         name: "Stakeholder Meeting",
         description: "Meet with stakeholders to gather requirements.",
-        status: "Pending",
+        status: "Todo", // Changed to "Todo"
         priority: "High",
         dueDate: "2024-11-01",
         assignedUser: "Laura Croft",

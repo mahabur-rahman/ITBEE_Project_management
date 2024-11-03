@@ -4,12 +4,12 @@ import ProjectToolbar from "./ProjectToolbar";
 import { Modal, Form, Input, Collapse } from "antd";
 import { ProjectType, TaskType } from "../interface/project.interface";
 import { useNavigate } from "react-router-dom";
-import { projects as initialProjects } from "../data/data"; // Ensure you have your initial projects data imported
+import { projects as initialProjects } from "../data/data";
 
 const { Panel } = Collapse;
 
 const Project = () => {
-  const [projects, setProjects] = useState<ProjectType[]>(initialProjects); // Set initial projects state
+  const [projects, setProjects] = useState<ProjectType[]>(initialProjects);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [currentProject, setCurrentProject] = useState<ProjectType | null>(null);
   const [currentTask, setCurrentTask] = useState<TaskType | null>(null);
@@ -104,8 +104,16 @@ const Project = () => {
                                   <span
                                     className={`px-3 py-1 rounded-full text-white font-semibold ${
                                       task.status === "Completed"
-                                        ? "bg-green-500"
-                                        : "bg-yellow-500"
+                                        ? "bg-green-600"
+                                        : task.status === "In Progress"
+                                        ? "bg-blue-500"
+                                        : task.status === "Todo"
+                                        ? "bg-yellow-500"
+                                        : task.status === "Review"
+                                        ? "bg-purple-500"
+                                        : task.status === "Blocked"
+                                        ? "bg-red-500"
+                                        : "bg-gray-500" // Fallback for other statuses
                                     }`}
                                   >
                                     {task.status}
