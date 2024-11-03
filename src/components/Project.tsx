@@ -80,7 +80,7 @@ const Project = () => {
                                 className="text-blue-500 cursor-pointer"
                                 title="View Task"
                                 onClick={() =>
-                                  navigate(`/view-task/${task.id}`) 
+                                  navigate(`/view-task/${task.id}`)
                                 }
                               />
                               <FaEdit
