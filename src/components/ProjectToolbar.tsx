@@ -13,7 +13,6 @@ const ProjectToolbar = () => {
 
   const handleOk = (values: TaskFormValues) => {
     console.log("Task added:", values);
-
     setIsModalVisible(false);
   };
 
@@ -24,14 +23,29 @@ const ProjectToolbar = () => {
   return (
     <>
       <div className="mb-4 flex justify-between items-center">
-        <input
-          type="text"
-          placeholder="Search projects..."
-          className="border border-gray-300 rounded-md p-2 w-60"
-        />
-        <Button type="primary" onClick={showModal}>
-          + Add Tasks
-        </Button>
+        <div className="flex items-center space-x-4">
+          <input
+            type="text"
+            placeholder="Search projects..."
+            className="border border-gray-300 rounded-md p-2 w-60"
+          />
+        </div>
+
+        <div>
+          <Select placeholder="Select a Project" className="w-60 mx-4">
+            <Option value="Project Alpha">Project Alpha</Option>
+            <Option value="Project D">Project D</Option>
+            <Option value="Project E">Project E</Option>
+            <Option value="Project F">Project F</Option>
+            <Option value="Project G">Project G</Option>
+            <Option value="Project H">Project H</Option>
+            <Option value="Project I">Project I</Option>
+            <Option value="Project J">Project J</Option>
+          </Select>
+          <Button type="primary" onClick={showModal}>
+            + Add Tasks
+          </Button>
+        </div>
       </div>
 
       <Modal
