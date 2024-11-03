@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import ProjectToolbar from "./ProjectToolbar";
-import { ProjectType, TaskFormValues, TaskType } from "../interface/project.interface";
+import {
+  ProjectType,
+  TaskFormValues,
+  TaskType,
+} from "../interface/project.interface";
 import { useNavigate } from "react-router-dom";
 import { projects as initialProjects } from "../data/data";
 import { Modal, Form, Input, Select, Collapse, message } from "antd";
@@ -12,7 +16,9 @@ const { Panel } = Collapse;
 const Project = () => {
   const [projects, setProjects] = useState<ProjectType[]>(initialProjects);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [currentProject, setCurrentProject] = useState<ProjectType | null>(null);
+  const [currentProject, setCurrentProject] = useState<ProjectType | null>(
+    null
+  );
   const [currentTask, setCurrentTask] = useState<TaskType | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -124,7 +130,9 @@ const Project = () => {
                             <th className="px-4 py-2 text-left">Description</th>
                             <th className="px-4 py-2 text-left">Status</th>
                             <th className="px-4 py-2 text-left">Due Date</th>
-                            <th className="px-4 py-2 text-left">Assigned User</th>
+                            <th className="px-4 py-2 text-left">
+                              Assigned User
+                            </th>
                             <th className="px-4 py-2 text-left">Priority</th>
                             <th className="px-4 py-2 text-left">Actions</th>
                           </tr>
@@ -137,7 +145,9 @@ const Project = () => {
                             .map((task: TaskType) => (
                               <tr key={task.id}>
                                 <td className="px-4 py-2">{task.name}</td>
-                                <td className="px-4 py-2">{task.description}</td>
+                                <td className="px-4 py-2">
+                                  {task.description}
+                                </td>
                                 <td className="px-4 py-2">
                                   <span
                                     className={`px-3 py-1 rounded-full text-white font-semibold ${
@@ -158,8 +168,14 @@ const Project = () => {
                                   </span>
                                 </td>
                                 <td className="px-4 py-2">{task.dueDate}</td>
-                                <td className="px-4 py-2">{task.assignedUser}</td>
-                                <td className={`px-4 py-2 ${getPriorityColor(task.priority)}`}>
+                                <td className="px-4 py-2">
+                                  {task.assignedUser}
+                                </td>
+                                <td
+                                  className={`px-4 py-2 ${getPriorityColor(
+                                    task.priority
+                                  )}`}
+                                >
                                   {task.priority}
                                 </td>
                                 <td className="px-4 py-2 flex gap-4 text-lg">
@@ -167,7 +183,9 @@ const Project = () => {
                                     className="text-blue-500 cursor-pointer"
                                     title="View Task"
                                     onClick={() =>
-                                      navigate(`/view-task/projectId/${project.id}/taskId/${task.id}`)
+                                      navigate(
+                                        `/view-task/projectId/${project.id}/taskId/${task.id}`
+                                      )
                                     }
                                   />
                                   <FaEdit
@@ -180,9 +198,8 @@ const Project = () => {
                                     title="Delete Task"
                                     onClick={() => {
                                       // Optional: Add confirmation before deletion
-                                      if (window.confirm("Are you sure you want to delete this task?")) {
-                                        handleDeleteTask(project.id, task.id);
-                                      }
+
+                                      handleDeleteTask(project.id, task.id);
                                     }}
                                   />
                                 </td>

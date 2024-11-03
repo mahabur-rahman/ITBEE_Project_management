@@ -23,13 +23,6 @@ const ProjectToolbar = () => {
   return (
     <>
       <div className="mb-4 flex justify-between items-center">
-        {/* <div className="flex items-center space-x-4">
-          <input
-            type="text"
-            placeholder="Search projects..."
-            className="border border-gray-300 rounded-md p-2 w-60"
-          />
-        </div> */}
         <data></data>
         <div>
           <Select placeholder="Select a Project" className="w-60 mx-4">
