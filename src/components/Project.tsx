@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import ProjectToolbar from "./ProjectToolbar";
-import { Modal, Form, Input, Collapse } from "antd";
 import { ProjectType, TaskType } from "../interface/project.interface";
 import { useNavigate } from "react-router-dom";
 import { projects as initialProjects } from "../data/data";
+import { Modal, Form, Input, Select, Collapse } from "antd";
 
+const { Option } = Select;
 const { Panel } = Collapse;
 
 const Project = () => {
   const [projects, setProjects] = useState<ProjectType[]>(initialProjects);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [currentProject, setCurrentProject] = useState<ProjectType | null>(null);
+  const [currentProject, setCurrentProject] = useState<ProjectType | null>(
+    null
+  );
   const [currentTask, setCurrentTask] = useState<TaskType | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -39,9 +42,9 @@ const Project = () => {
   };
 
   // Filter projects and tasks based on the search term
-  const filteredProjects = projects.filter(project => {
+  const filteredProjects = projects.filter((project) => {
     const isProjectMatch = project.name.toLowerCase().includes(searchTerm);
-    const isTaskMatch = project.tasks.some(task =>
+    const isTaskMatch = project.tasks.some((task) =>
       task.name.toLowerCase().includes(searchTerm)
     );
     return isProjectMatch || isTaskMatch;
@@ -49,11 +52,11 @@ const Project = () => {
 
   // Handle delete task
   const handleDeleteTask = (projectId: number, taskId: number) => {
-    const updatedProjects = projects.map(project => {
+    const updatedProjects = projects.map((project) => {
       if (project.id === projectId) {
         return {
           ...project,
-          tasks: project.tasks.filter(task => task.id !== taskId)
+          tasks: project.tasks.filter((task) => task.id !== taskId),
         };
       }
       return project;
@@ -102,18 +105,24 @@ const Project = () => {
                             <th className="px-4 py-2 text-left">Description</th>
                             <th className="px-4 py-2 text-left">Status</th>
                             <th className="px-4 py-2 text-left">Due Date</th>
-                            <th className="px-4 py-2 text-left">Assigned User</th>
+                            <th className="px-4 py-2 text-left">
+                              Assigned User
+                            </th>
                             <th className="px-4 py-2 text-left">Priority</th>
                             <th className="px-4 py-2 text-left">Actions</th>
                           </tr>
                         </thead>
                         <tbody>
                           {project.tasks
-                            .filter(task => task.name.toLowerCase().includes(searchTerm)) // Filter tasks based on search term
+                            .filter((task) =>
+                              task.name.toLowerCase().includes(searchTerm)
+                            ) // Filter tasks based on search term
                             .map((task: TaskType) => (
                               <tr key={task.id}>
                                 <td className="px-4 py-2">{task.name}</td>
-                                <td className="px-4 py-2">{task.description}</td>
+                                <td className="px-4 py-2">
+                                  {task.description}
+                                </td>
                                 <td className="px-4 py-2">
                                   <span
                                     className={`px-3 py-1 rounded-full text-white font-semibold ${
@@ -134,8 +143,14 @@ const Project = () => {
                                   </span>
                                 </td>
                                 <td className="px-4 py-2">{task.dueDate}</td>
-                                <td className="px-4 py-2">{task.assignedUser}</td>
-                                <td className={`px-4 py-2 ${getPriorityColor(task.priority)}`}>
+                                <td className="px-4 py-2">
+                                  {task.assignedUser}
+                                </td>
+                                <td
+                                  className={`px-4 py-2 ${getPriorityColor(
+                                    task.priority
+                                  )}`}
+                                >
                                   {task.priority}
                                 </td>
                                 <td className="px-4 py-2 flex gap-4 text-lg">
@@ -204,7 +219,15 @@ const Project = () => {
               <Input type="date" defaultValue={currentProject.endDate} />
             </Form.Item>
             <Form.Item label="Project Status">
-              <Input defaultValue={currentProject.status} />
+              <Select
+                defaultValue={currentProject.status}
+                style={{ width: "100%" }}
+              >
+                <Option value="todo">To Do</Option>
+                <Option value="in-progress">In Progress</Option>
+                <Option value="completed">Completed</Option>
+                <Option value="review">Review</Option>
+              </Select>
             </Form.Item>
             <Form.Item label="Task Name">
               <Input defaultValue={currentTask.name} />
@@ -213,10 +236,25 @@ const Project = () => {
               <Input.TextArea defaultValue={currentTask.description} />
             </Form.Item>
             <Form.Item label="Task Priority">
-              <Input defaultValue={currentTask.priority} />
+              <Select
+                defaultValue={currentTask.priority}
+                style={{ width: "100%" }}
+              >
+                <Option value="High">High</Option>
+                <Option value="Medium">Medium</Option>
+                <Option value="Low">Low</Option>
+              </Select>
             </Form.Item>
             <Form.Item label="Task Status">
-              <Input defaultValue={currentTask.status} />
+              <Select
+                defaultValue={currentTask.status}
+                style={{ width: "100%" }}
+              >
+                <Option value="todo">To Do</Option>
+                <Option value="in-progress">In Progress</Option>
+                <Option value="completed">Completed</Option>
+                <Option value="review">Review</Option>
+              </Select>
             </Form.Item>
           </Form>
         )}
