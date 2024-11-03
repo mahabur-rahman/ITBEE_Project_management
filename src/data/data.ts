@@ -40,7 +40,7 @@ export const projects: ProjectType[] = [
     endDate: "2025-11-01",
     tasks: [
       {
-        id: 3,
+        id: 1,
         name: "Market Research",
         description: "Conduct market research for the product.",
         status: "Pending",
@@ -49,7 +49,7 @@ export const projects: ProjectType[] = [
         assignedUser: "Alice Johnson",
       },
       {
-        id: 4,
+        id: 2,
         name: "Develop Backend",
         description: "Set up the backend API.",
         status: "Pending",
@@ -69,7 +69,7 @@ export const projects: ProjectType[] = [
     endDate: "2025-12-01",
     tasks: [
       {
-        id: 5,
+        id: 1,
         name: "Create User Stories",
         description: "Draft user stories for the application.",
         status: "Completed",
@@ -78,7 +78,7 @@ export const projects: ProjectType[] = [
         assignedUser: "Emily White",
       },
       {
-        id: 6,
+        id: 2,
         name: "UI Testing",
         description: "Perform UI testing on the application.",
         status: "Pending",
@@ -98,7 +98,7 @@ export const projects: ProjectType[] = [
     endDate: "2025-02-01",
     tasks: [
       {
-        id: 7,
+        id: 1,
         name: "Finalize Requirements",
         description: "Finalize requirements with the stakeholders.",
         status: "Pending",
@@ -118,7 +118,7 @@ export const projects: ProjectType[] = [
     endDate: "2025-05-01",
     tasks: [
       {
-        id: 8,
+        id: 1,
         name: "Define Scope",
         description: "Define the project scope and objectives.",
         status: "Pending",
@@ -138,7 +138,7 @@ export const projects: ProjectType[] = [
     endDate: "2025-04-01",
     tasks: [
       {
-        id: 9,
+        id: 1,
         name: "Stakeholder Meeting",
         description: "Meet with stakeholders to gather requirements.",
         status: "Pending",
