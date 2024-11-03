@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { projects } from "../data/data";
+import { projects as initialProjects } from "../data/data"; // Import the initial projects data
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import ProjectToolbar from "./ProjectToolbar";
 import { Modal, Form, Input, Collapse } from "antd";
@@ -9,10 +9,9 @@ import { useNavigate } from "react-router-dom";
 const { Panel } = Collapse;
 
 const Project = () => {
+  const [projects, setProjects] = useState<ProjectType[]>(initialProjects); // Set initial projects state
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [currentProject, setCurrentProject] = useState<ProjectType | null>(
-    null
-  );
+  const [currentProject, setCurrentProject] = useState<ProjectType | null>(null);
   const [currentTask, setCurrentTask] = useState<TaskType | null>(null);
 
   const navigate = useNavigate();
@@ -31,6 +30,21 @@ const Project = () => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  // Function to delete a task
+  const deleteTask = (projectId: number, taskId: number) => {
+    const updatedProjects = projects.map((project) => {
+      if (project.id === projectId) {
+        // Filter out the task to be deleted
+        const updatedTasks = project.tasks.filter((task) => task.id !== taskId);
+        return { ...project, tasks: updatedTasks };
+      }
+      return project; // Return other projects unchanged
+    });
+
+    setProjects(updatedProjects); // Update the state with the new projects array
+    console.log("Task deleted:", taskId);
   };
 
   return (
@@ -94,9 +108,7 @@ const Project = () => {
                               <FaTrashAlt
                                 className="text-red-500 cursor-pointer"
                                 title="Delete Task"
-                                onClick={() =>
-                                  console.log("Delete Task", task.id)
-                                }
+                                onClick={() => deleteTask(project.id, task.id)}
                               />
                             </td>
                           </tr>
@@ -104,7 +116,7 @@ const Project = () => {
                       </tbody>
                     </table>
                   ) : (
-                    <p>No tasks available for this project.</p>
+                    <p className="text-red-400 font-semibold">No tasks available for this project.</p>
                   )}
                 </div>
               </Panel>
