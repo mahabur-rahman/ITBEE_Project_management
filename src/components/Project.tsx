@@ -4,7 +4,7 @@ import ProjectToolbar from "./ProjectToolbar";
 import { ProjectType, TaskFormValues, TaskType } from "../interface/project.interface";
 import { useNavigate } from "react-router-dom";
 import { projects as initialProjects } from "../data/data";
-import { Modal, Form, Input, Select, Collapse } from "antd";
+import { Modal, Form, Input, Select, Collapse, message } from "antd";
 
 const { Option } = Select;
 const { Panel } = Collapse;
@@ -12,9 +12,7 @@ const { Panel } = Collapse;
 const Project = () => {
   const [projects, setProjects] = useState<ProjectType[]>(initialProjects);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [currentProject, setCurrentProject] = useState<ProjectType | null>(
-    null
-  );
+  const [currentProject, setCurrentProject] = useState<ProjectType | null>(null);
   const [currentTask, setCurrentTask] = useState<TaskType | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -28,19 +26,16 @@ const Project = () => {
 
   const handleOk = async (values: TaskFormValues) => {
     if (currentProject && currentTask) {
-      // Update current project with new values
       const updatedProject: ProjectType = {
         ...currentProject,
         ...values.project, // Spread new project values
       };
-  
-      // Update current task with new values
+
       const updatedTask: TaskType = {
         ...currentTask,
         ...values.task, // Spread new task values
       };
-  
-      // Update projects state with modified project and task
+
       const updatedProjects = projects.map((project) => {
         if (project.id === updatedProject.id) {
           return {
@@ -52,23 +47,21 @@ const Project = () => {
         }
         return project;
       });
-  
+
       setProjects(updatedProjects); // Update state with the new project list
       setIsModalVisible(false); // Close the modal
+      message.success("Project and Task updated successfully!"); // Success message
     }
   };
-  
 
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
-  // Handle search input change
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value.toLowerCase());
   };
 
-  // Filter projects and tasks based on the search term
   const filteredProjects = projects.filter((project) => {
     const isProjectMatch = project.name.toLowerCase().includes(searchTerm);
     const isTaskMatch = project.tasks.some((task) =>
@@ -77,7 +70,6 @@ const Project = () => {
     return isProjectMatch || isTaskMatch;
   });
 
-  // Handle delete task
   const handleDeleteTask = (projectId: number, taskId: number) => {
     const updatedProjects = projects.map((project) => {
       if (project.id === projectId) {
@@ -88,20 +80,20 @@ const Project = () => {
       }
       return project;
     });
-    setProjects(updatedProjects); // Update state with the new project list
+    setProjects(updatedProjects);
+    message.success("Task deleted successfully!"); // Success message
   };
 
-  // Function to get color based on priority
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "High":
-        return "text-red-600"; // Red for high priority
+        return "text-red-600";
       case "Medium":
-        return "text-yellow-500"; // Yellow for medium priority
+        return "text-yellow-500";
       case "Low":
-        return "text-green-400"; // Green for low priority
+        return "text-green-400";
       default:
-        return "text-gray-500"; // Default gray for unknown priority
+        return "text-gray-500";
     }
   };
 
@@ -132,9 +124,7 @@ const Project = () => {
                             <th className="px-4 py-2 text-left">Description</th>
                             <th className="px-4 py-2 text-left">Status</th>
                             <th className="px-4 py-2 text-left">Due Date</th>
-                            <th className="px-4 py-2 text-left">
-                              Assigned User
-                            </th>
+                            <th className="px-4 py-2 text-left">Assigned User</th>
                             <th className="px-4 py-2 text-left">Priority</th>
                             <th className="px-4 py-2 text-left">Actions</th>
                           </tr>
@@ -143,13 +133,11 @@ const Project = () => {
                           {project.tasks
                             .filter((task) =>
                               task.name.toLowerCase().includes(searchTerm)
-                            ) // Filter tasks based on search term
+                            )
                             .map((task: TaskType) => (
                               <tr key={task.id}>
                                 <td className="px-4 py-2">{task.name}</td>
-                                <td className="px-4 py-2">
-                                  {task.description}
-                                </td>
+                                <td className="px-4 py-2">{task.description}</td>
                                 <td className="px-4 py-2">
                                   <span
                                     className={`px-3 py-1 rounded-full text-white font-semibold ${
@@ -163,21 +151,15 @@ const Project = () => {
                                         ? "bg-purple-500"
                                         : task.status === "Blocked"
                                         ? "bg-red-500"
-                                        : "bg-gray-500" // Fallback for other statuses
+                                        : "bg-gray-500"
                                     }`}
                                   >
                                     {task.status}
                                   </span>
                                 </td>
                                 <td className="px-4 py-2">{task.dueDate}</td>
-                                <td className="px-4 py-2">
-                                  {task.assignedUser}
-                                </td>
-                                <td
-                                  className={`px-4 py-2 ${getPriorityColor(
-                                    task.priority
-                                  )}`}
-                                >
+                                <td className="px-4 py-2">{task.assignedUser}</td>
+                                <td className={`px-4 py-2 ${getPriorityColor(task.priority)}`}>
                                   {task.priority}
                                 </td>
                                 <td className="px-4 py-2 flex gap-4 text-lg">
@@ -185,9 +167,7 @@ const Project = () => {
                                     className="text-blue-500 cursor-pointer"
                                     title="View Task"
                                     onClick={() =>
-                                      navigate(
-                                        `/view-task/projectId/${project.id}/taskId/${task.id}`
-                                      )
+                                      navigate(`/view-task/projectId/${project.id}/taskId/${task.id}`)
                                     }
                                   />
                                   <FaEdit
@@ -199,8 +179,10 @@ const Project = () => {
                                     className="text-red-500 cursor-pointer"
                                     title="Delete Task"
                                     onClick={() => {
-                                      handleDeleteTask(project.id, task.id);
-                                      console.log("Delete Task", task.id);
+                                      // Optional: Add confirmation before deletion
+                                      if (window.confirm("Are you sure you want to delete this task?")) {
+                                        handleDeleteTask(project.id, task.id);
+                                      }
                                     }}
                                   />
                                 </td>
@@ -273,9 +255,10 @@ const Project = () => {
               <Select>
                 <Option value="Ongoing">Ongoing</Option>
                 <Option value="Completed">Completed</Option>
-                <Option value="Pending">Pending</Option>
+                <Option value="On Hold">On Hold</Option>
               </Select>
             </Form.Item>
+
             <Form.Item
               label="Task Name"
               name={["task", "name"]}
@@ -296,9 +279,9 @@ const Project = () => {
               initialValue={currentTask.status}
             >
               <Select>
-                <Option value="Completed">Completed</Option>
-                <Option value="In Progress">In Progress</Option>
                 <Option value="Todo">Todo</Option>
+                <Option value="In Progress">In Progress</Option>
+                <Option value="Completed">Completed</Option>
                 <Option value="Review">Review</Option>
                 <Option value="Blocked">Blocked</Option>
               </Select>
@@ -323,16 +306,13 @@ const Project = () => {
               initialValue={currentTask.priority}
             >
               <Select>
-                <Option value="High">High</Option>
-                <Option value="Medium">Medium</Option>
                 <Option value="Low">Low</Option>
+                <Option value="Medium">Medium</Option>
+                <Option value="High">High</Option>
               </Select>
             </Form.Item>
             <Form.Item>
-              <button
-                type="submit"
-                className="bg-blue-500 text-white py-2 px-4 rounded"
-              >
+              <button type="submit" className="btn btn-primary">
                 Save Changes
               </button>
             </Form.Item>
