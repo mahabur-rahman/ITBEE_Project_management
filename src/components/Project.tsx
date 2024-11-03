@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import ProjectToolbar from "./ProjectToolbar";
-import { ProjectType, TaskType } from "../interface/project.interface";
+import { ProjectType, TaskFormValues, TaskType } from "../interface/project.interface";
 import { useNavigate } from "react-router-dom";
 import { projects as initialProjects } from "../data/data";
 import { Modal, Form, Input, Select, Collapse } from "antd";
@@ -26,11 +26,38 @@ const Project = () => {
     setIsModalVisible(true);
   };
 
-  const handleOk = () => {
-    console.log("Submitting changes for project:", currentProject);
-    console.log("Submitting changes for task:", currentTask);
-    setIsModalVisible(false);
+  const handleOk = async (values: TaskFormValues) => {
+    if (currentProject && currentTask) {
+      // Update current project with new values
+      const updatedProject: ProjectType = {
+        ...currentProject,
+        ...values.project, // Spread new project values
+      };
+  
+      // Update current task with new values
+      const updatedTask: TaskType = {
+        ...currentTask,
+        ...values.task, // Spread new task values
+      };
+  
+      // Update projects state with modified project and task
+      const updatedProjects = projects.map((project) => {
+        if (project.id === updatedProject.id) {
+          return {
+            ...updatedProject,
+            tasks: project.tasks.map((task) =>
+              task.id === updatedTask.id ? updatedTask : task
+            ),
+          };
+        }
+        return project;
+      });
+  
+      setProjects(updatedProjects); // Update state with the new project list
+      setIsModalVisible(false); // Close the modal
+    }
   };
+  
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -197,64 +224,117 @@ const Project = () => {
       <Modal
         title="Edit Project and Task"
         visible={isModalVisible}
-        onOk={handleOk}
         onCancel={handleCancel}
+        footer={null}
         style={{ top: 20 }}
       >
         {currentProject && currentTask && (
-          <Form layout="vertical">
-            <Form.Item label="Project Name">
-              <Input defaultValue={currentProject.name} />
+          <Form layout="vertical" onFinish={handleOk}>
+            <Form.Item
+              label="Project Name"
+              name={["project", "name"]}
+              initialValue={currentProject.name}
+            >
+              <Input />
             </Form.Item>
-            <Form.Item label="Project Description">
-              <Input.TextArea defaultValue={currentProject.description} />
+            <Form.Item
+              label="Project Description"
+              name={["project", "description"]}
+              initialValue={currentProject.description}
+            >
+              <Input.TextArea />
             </Form.Item>
-            <Form.Item label="Project Budget">
-              <Input type="number" defaultValue={currentProject.budget} />
+            <Form.Item
+              label="Project Budget"
+              name={["project", "budget"]}
+              initialValue={currentProject.budget}
+            >
+              <Input type="number" />
             </Form.Item>
-            <Form.Item label="Project Start Date">
-              <Input type="date" defaultValue={currentProject.startDate} />
+            <Form.Item
+              label="Project Start Date"
+              name={["project", "startDate"]}
+              initialValue={currentProject.startDate}
+            >
+              <Input type="date" />
             </Form.Item>
-            <Form.Item label="Project End Date">
-              <Input type="date" defaultValue={currentProject.endDate} />
+            <Form.Item
+              label="Project End Date"
+              name={["project", "endDate"]}
+              initialValue={currentProject.endDate}
+            >
+              <Input type="date" />
             </Form.Item>
-            <Form.Item label="Project Status">
-              <Select
-                defaultValue={currentProject.status}
-                style={{ width: "100%" }}
-              >
-                <Option value="todo">To Do</Option>
-                <Option value="in-progress">In Progress</Option>
-                <Option value="completed">Completed</Option>
-                <Option value="review">Review</Option>
+            <Form.Item
+              label="Project Status"
+              name={["project", "status"]}
+              initialValue={currentProject.status}
+            >
+              <Select>
+                <Option value="Ongoing">Ongoing</Option>
+                <Option value="Completed">Completed</Option>
+                <Option value="Pending">Pending</Option>
               </Select>
             </Form.Item>
-            <Form.Item label="Task Name">
-              <Input defaultValue={currentTask.name} />
+            <Form.Item
+              label="Task Name"
+              name={["task", "name"]}
+              initialValue={currentTask.name}
+            >
+              <Input />
             </Form.Item>
-            <Form.Item label="Task Description">
-              <Input.TextArea defaultValue={currentTask.description} />
+            <Form.Item
+              label="Task Description"
+              name={["task", "description"]}
+              initialValue={currentTask.description}
+            >
+              <Input.TextArea />
             </Form.Item>
-            <Form.Item label="Task Priority">
-              <Select
-                defaultValue={currentTask.priority}
-                style={{ width: "100%" }}
-              >
+            <Form.Item
+              label="Task Status"
+              name={["task", "status"]}
+              initialValue={currentTask.status}
+            >
+              <Select>
+                <Option value="Completed">Completed</Option>
+                <Option value="In Progress">In Progress</Option>
+                <Option value="Todo">Todo</Option>
+                <Option value="Review">Review</Option>
+                <Option value="Blocked">Blocked</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Task Due Date"
+              name={["task", "dueDate"]}
+              initialValue={currentTask.dueDate}
+            >
+              <Input type="date" />
+            </Form.Item>
+            <Form.Item
+              label="Assigned User"
+              name={["task", "assignedUser"]}
+              initialValue={currentTask.assignedUser}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Task Priority"
+              name={["task", "priority"]}
+              initialValue={currentTask.priority}
+            >
+              <Select>
                 <Option value="High">High</Option>
                 <Option value="Medium">Medium</Option>
                 <Option value="Low">Low</Option>
               </Select>
             </Form.Item>
-            <Form.Item label="Task Status">
-              <Select
-                defaultValue={currentTask.status}
-                style={{ width: "100%" }}
+            <Form.Item>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white py-2 px-4 rounded"
               >
-                <Option value="todo">To Do</Option>
-                <Option value="in-progress">In Progress</Option>
-                <Option value="completed">Completed</Option>
-                <Option value="review">Review</Option>
-              </Select>
+                Save Changes
+              </button>
             </Form.Item>
           </Form>
         )}
