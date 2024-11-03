@@ -39,7 +39,7 @@ const Project = () => {
         <ProjectToolbar />
 
         <div className="mt-4">
-          <Collapse>
+          <Collapse defaultActiveKey={[projects[0]?.id]}>
             {projects?.map((project: ProjectType) => (
               <Panel header={project.name} key={project.id}>
                 <div className="p-4">
