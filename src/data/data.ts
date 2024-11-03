@@ -24,7 +24,7 @@ export const projects: ProjectType[] = [
         name: "Develop Frontend",
         description: "Implement the frontend using React.",
         status: "Todo", // Changed to "Todo"
-        priority: "High",
+        priority: "Low",
         dueDate: "2024-04-01",
         assignedUser: "Jane Smith",
       },
@@ -53,7 +53,7 @@ export const projects: ProjectType[] = [
         name: "Develop Backend",
         description: "Set up the backend API.",
         status: "Todo", // Changed to "Todo"
-        priority: "High",
+        priority: "Medium",
         dueDate: "2024-09-30",
         assignedUser: "Bob Brown",
       },

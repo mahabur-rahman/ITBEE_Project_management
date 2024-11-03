@@ -61,6 +61,20 @@ const Project = () => {
     setProjects(updatedProjects); // Update state with the new project list
   };
 
+  // Function to get color based on priority
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "High":
+        return "text-red-600"; // Red for high priority
+      case "Medium":
+        return "text-yellow-500"; // Yellow for medium priority
+      case "Low":
+        return "text-green-400"; // Green for low priority
+      default:
+        return "text-gray-500"; // Default gray for unknown priority
+    }
+  };
+
   return (
     <>
       <div className="p-6">
@@ -121,7 +135,9 @@ const Project = () => {
                                 </td>
                                 <td className="px-4 py-2">{task.dueDate}</td>
                                 <td className="px-4 py-2">{task.assignedUser}</td>
-                                <td className="px-4 py-2">{task.priority}</td>
+                                <td className={`px-4 py-2 ${getPriorityColor(task.priority)}`}>
+                                  {task.priority}
+                                </td>
                                 <td className="px-4 py-2 flex gap-4 text-lg">
                                   <FaEye
                                     className="text-blue-500 cursor-pointer"
