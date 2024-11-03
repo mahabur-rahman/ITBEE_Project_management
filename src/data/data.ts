@@ -148,4 +148,25 @@ export const projects: ProjectType[] = [
       },
     ],
   },
+
+  {
+    id: 7,
+    name: "Project Demo",
+    description: "Project H description.",
+    status: "Planning",
+    budget: "$112,547",
+    startDate: "2024-10-01",
+    endDate: "2025-04-01",
+    tasks: [
+      {
+        id: 1,
+        name: "demo Meeting",
+        description: "Meet with stakeholders to gather requirements.",
+        status: "Todo", // Changed to "Todo"
+        priority: "High",
+        dueDate: "2024-11-01",
+        assignedUser: "Laura Croft",
+      },
+    ],
+  },
 ];

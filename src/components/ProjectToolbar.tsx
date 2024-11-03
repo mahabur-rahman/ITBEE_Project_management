@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Modal, Input, Form, Button, Select } from "antd";
 import { TaskFormValues } from "../interface/project.interface";
+import { projects } from "../data/data";
+
 
 const { Option } = Select;
 
@@ -26,14 +28,11 @@ const ProjectToolbar = () => {
         <data></data>
         <div>
           <Select placeholder="Select a Project" className="w-60 mx-4">
-            <Option value="Project Alpha">Project Alpha</Option>
-            <Option value="Project D">Project D</Option>
-            <Option value="Project E">Project E</Option>
-            <Option value="Project F">Project F</Option>
-            <Option value="Project G">Project G</Option>
-            <Option value="Project H">Project H</Option>
-            <Option value="Project I">Project I</Option>
-            <Option value="Project J">Project J</Option>
+            {projects.map((project) => (
+              <Option key={project.id} value={project.name}>
+                {project.name}
+              </Option>
+            ))}
           </Select>
           <Button type="primary" onClick={showModal}>
             + Add Tasks
@@ -60,9 +59,7 @@ const ProjectToolbar = () => {
           <Form.Item
             label="Task Description"
             name="taskDescription"
-            rules={[
-              { required: true, message: "Please input the task description!" },
-            ]}
+            rules={[{ required: true, message: "Please input the task description!" }]}
           >
             <Input.TextArea placeholder="Enter task description" />
           </Form.Item>
@@ -90,9 +87,7 @@ const ProjectToolbar = () => {
           <Form.Item
             label="Assigned User"
             name="assignedUser"
-            rules={[
-              { required: true, message: "Please input the assigned user!" },
-            ]}
+            rules={[{ required: true, message: "Please input the assigned user!" }]}
           >
             <Input placeholder="Enter assigned user" />
           </Form.Item>
