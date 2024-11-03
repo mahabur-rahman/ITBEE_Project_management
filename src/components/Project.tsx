@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { projects } from "../data/data"; // Ensure you have your projects data imported
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import ProjectToolbar from "./ProjectToolbar";
 import { Modal, Form, Input, Collapse } from "antd";
 import { ProjectType, TaskType } from "../interface/project.interface";
 import { useNavigate } from "react-router-dom";
+import { projects as initialProjects } from "../data/data"; // Ensure you have your initial projects data imported
 
 const { Panel } = Collapse;
 
 const Project = () => {
+  const [projects, setProjects] = useState<ProjectType[]>(initialProjects); // Set initial projects state
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [currentProject, setCurrentProject] = useState<ProjectType | null>(null);
   const [currentTask, setCurrentTask] = useState<TaskType | null>(null);
@@ -34,7 +35,7 @@ const Project = () => {
 
   // Handle search input change
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value.toLowerCase()); // Convert input to lowercase
+    setSearchTerm(event.target.value.toLowerCase());
   };
 
   // Filter projects and tasks based on the search term
@@ -45,6 +46,20 @@ const Project = () => {
     );
     return isProjectMatch || isTaskMatch;
   });
+
+  // Handle delete task
+  const handleDeleteTask = (projectId: number, taskId: number) => {
+    const updatedProjects = projects.map(project => {
+      if (project.id === projectId) {
+        return {
+          ...project,
+          tasks: project.tasks.filter(task => task.id !== taskId)
+        };
+      }
+      return project;
+    });
+    setProjects(updatedProjects); // Update state with the new project list
+  };
 
   return (
     <>
@@ -117,9 +132,10 @@ const Project = () => {
                                   <FaTrashAlt
                                     className="text-red-500 cursor-pointer"
                                     title="Delete Task"
-                                    onClick={() =>
-                                      console.log("Delete Task", task.id)
-                                    }
+                                    onClick={() => {
+                                      handleDeleteTask(project.id, task.id);
+                                      console.log("Delete Task", task.id);
+                                    }}
                                   />
                                 </td>
                               </tr>
