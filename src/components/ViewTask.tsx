@@ -11,9 +11,10 @@ const ViewTasks: React.FC = () => {
     return <p className="text-red-600">Project ID and Task ID are required.</p>;
   }
 
-  // Fetch projects data from localStorage
   const storedProjects = localStorage.getItem("projects");
-  const projects: ProjectType[] = storedProjects ? JSON.parse(storedProjects) : [];
+  const projects: ProjectType[] = storedProjects
+    ? JSON.parse(storedProjects)
+    : [];
 
   const project: ProjectType | undefined = projects.find(
     (proj) => proj.id === parseInt(projectId)

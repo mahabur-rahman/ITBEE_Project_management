@@ -26,33 +26,33 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
   const handleOk = () => {
     form.validateFields().then((values) => {
       const projectIndex = projects.findIndex((p) => p.id === selectedProject);
-  
+
       if (projectIndex !== -1) {
-        // Check for duplicate task based on the task name or any other unique property
         const taskExists = projects[projectIndex].tasks.some(
-          (task) => task.name === values.name // Adjust this condition as needed
+          (task) => task.name === values.name
         );
-  
+
         if (taskExists) {
-          message.error("A task with this name already exists in the selected project!");
-          return; // Exit the function to prevent adding a duplicate
+          message.error(
+            "A task with this name already exists in the selected project!"
+          );
+          return;
         }
-  
-        const existingTaskIds = projects[projectIndex].tasks.map((task) => task.id);
-        const newTaskId = existingTaskIds.length > 0 ? Math.max(...existingTaskIds) + 1 : 1;
-  
+
+        const existingTaskIds = projects[projectIndex].tasks.map(
+          (task) => task.id
+        );
+        const newTaskId =
+          existingTaskIds.length > 0 ? Math.max(...existingTaskIds) + 1 : 1;
+
         const newTask = { ...values, id: newTaskId };
-  
-        // Update the project tasks
+
         projects[projectIndex].tasks.push(newTask);
-  
-        // Call the provided addTask function
+
         addTask(newTask);
-  
-        // Save the updated projects array to localStorage
+
         localStorage.setItem("projects", JSON.stringify(projects));
-  
-        // Close the modal and reset the form
+
         setIsModalVisible(false);
         form.resetFields();
       } else {
@@ -60,8 +60,6 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
       }
     });
   };
-  
-  
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -114,7 +112,9 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
           <Form.Item
             label="Task Description"
             name="description"
-            rules={[{ required: true, message: "Please input the task description!" }]}
+            rules={[
+              { required: true, message: "Please input the task description!" },
+            ]}
           >
             <Input.TextArea placeholder="Enter task description" />
           </Form.Item>
@@ -143,7 +143,9 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
           <Form.Item
             label="Assigned User"
             name="assignedUser"
-            rules={[{ required: true, message: "Please input the assigned user!" }]}
+            rules={[
+              { required: true, message: "Please input the assigned user!" },
+            ]}
           >
             <Input placeholder="Enter assigned user" />
           </Form.Item>

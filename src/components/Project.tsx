@@ -1,7 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import ProjectToolbar from "./ProjectToolbar";
-import { ProjectType, TaskFormValues, TaskType } from "../interface/project.interface";
+import {
+  ProjectType,
+  TaskFormValues,
+  TaskType,
+} from "../interface/project.interface";
 import { useNavigate } from "react-router-dom";
 import { projects as initialProjects } from "../data/data";
 import { Modal, Form, Input, Select, Collapse, message } from "antd";
@@ -11,20 +15,21 @@ const { Panel } = Collapse;
 
 const Project = () => {
   const navigate = useNavigate();
-
-  // Load projects from localStorage if available; otherwise use initialProjects
   const [projects, setProjects] = useState<ProjectType[]>(() => {
     const storedProjects = localStorage.getItem("projects");
     return storedProjects ? JSON.parse(storedProjects) : initialProjects;
   });
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [currentProject, setCurrentProject] = useState<ProjectType | null>(null);
+  const [currentProject, setCurrentProject] = useState<ProjectType | null>(
+    null
+  );
   const [currentTask, setCurrentTask] = useState<TaskType | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
+    null
+  );
 
-  // Save projects to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("projects", JSON.stringify(projects));
   }, [projects]);
@@ -69,7 +74,7 @@ const Project = () => {
     setIsModalVisible(false);
   };
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value.toLowerCase());
   };
 
@@ -115,7 +120,7 @@ const Project = () => {
         return "text-yellow-500";
       case "Completed":
         return "text-green-400";
-        case "Review":
+      case "Review":
         return "text-green-900";
       default:
         return "text-gray-500";
@@ -131,8 +136,7 @@ const Project = () => {
       message.warning("Please select a project first!");
       return;
     }
-  
-    // Update the projects array by adding the new task to the selected project's tasks
+
     setProjects((prevProjects) =>
       prevProjects.map((project) => {
         if (project.id === selectedProjectId) {
@@ -142,11 +146,14 @@ const Project = () => {
       })
     );
   };
-  
+
   return (
     <>
       <div className="p-6">
-        <ProjectToolbar addTask={addTaskToProject} onProjectSelect={handleProjectSelect} />
+        <ProjectToolbar
+          addTask={addTaskToProject}
+          onProjectSelect={handleProjectSelect}
+        />
 
         <Input
           placeholder="Search projects and tasks..."
@@ -169,7 +176,9 @@ const Project = () => {
                             <th className="px-4 py-2 text-left">Description</th>
                             <th className="px-4 py-2 text-left">Status</th>
                             <th className="px-4 py-2 text-left">Due Date</th>
-                            <th className="px-4 py-2 text-left">Assigned User</th>
+                            <th className="px-4 py-2 text-left">
+                              Assigned User
+                            </th>
                             <th className="px-4 py-2 text-left">Priority</th>
                             <th className="px-4 py-2 text-left">Actions</th>
                           </tr>
@@ -182,21 +191,38 @@ const Project = () => {
                             .map((task: TaskType) => (
                               <tr key={task.id}>
                                 <td className="px-4 py-2">{task.name}</td>
-                                <td className="px-4 py-2">{task.description}</td>
                                 <td className="px-4 py-2">
-                                  <span className={`px-3 py-1 rounded-full  font-semibold ${getStatusColor(task.status)}`}>
+                                  {task.description}
+                                </td>
+                                <td className="px-4 py-2">
+                                  <span
+                                    className={`px-3 py-1 rounded-full  font-semibold ${getStatusColor(
+                                      task.status
+                                    )}`}
+                                  >
                                     {task?.status}
-                                    {/* {task.status ? task.status : 'No Status'} */}
                                   </span>
                                 </td>
                                 <td className="px-4 py-2">{task.dueDate}</td>
-                                <td className="px-4 py-2">{task.assignedUser}</td>
-                                <td className={`px-4 py-2 ${getPriorityColor(task.priority)}`}>{task.priority}</td>
+                                <td className="px-4 py-2">
+                                  {task.assignedUser}
+                                </td>
+                                <td
+                                  className={`px-4 py-2 ${getPriorityColor(
+                                    task.priority
+                                  )}`}
+                                >
+                                  {task.priority}
+                                </td>
                                 <td className="flex gap-4 px-4 py-2 text-lg">
                                   <FaEye
                                     className="text-blue-500 cursor-pointer"
                                     title="View Task"
-                                    onClick={() => navigate(`/view-task/projectId/${project.id}/taskId/${task.id}`)}
+                                    onClick={() =>
+                                      navigate(
+                                        `/view-task/projectId/${project.id}/taskId/${task.id}`
+                                      )
+                                    }
                                   />
                                   <FaEdit
                                     className="text-yellow-500 cursor-pointer"
@@ -236,8 +262,7 @@ const Project = () => {
         style={{ top: 20 }}
       >
         {currentProject && currentTask && (
-
-         <Form layout="vertical" onFinish={handleOk}>
+          <Form layout="vertical" onFinish={handleOk}>
             <Form.Item
               label="Project Name"
               name={["project", "name"]}
