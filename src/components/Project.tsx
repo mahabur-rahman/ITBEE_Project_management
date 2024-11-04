@@ -112,8 +112,9 @@ const Project = () => {
         return "text-gray-500";
     }
   };
-  const getStatusColor = (priority: string) => {
-    switch (priority) {
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
       case "In Progress":
         return "text-red-600";
       case "Todo":
@@ -149,7 +150,7 @@ const Project = () => {
 
   return (
     <>
-      <div className="p-6">
+      <div className="p-4 sm:p-6 md:p-8 lg:p-10">
         <ProjectToolbar
           addTask={addTaskToProject}
           onProjectSelect={handleProjectSelect}
@@ -159,7 +160,7 @@ const Project = () => {
           placeholder="Search projects and tasks..."
           value={searchTerm}
           onChange={handleSearchChange}
-          className="mb-4"
+          className="w-full mb-4"
         />
 
         <div className="mt-4">
@@ -167,20 +168,18 @@ const Project = () => {
             {filteredProjects.length > 0 ? (
               filteredProjects.map((project: ProjectType) => (
                 <Panel header={project.name} key={project.id}>
-                  <div className="p-4">
+                  <div className="p-2 overflow-x-auto">
                     {project.tasks.length > 0 ? (
                       <table className="min-w-full bg-white border border-gray-300">
                         <thead className="bg-gray-100">
                           <tr>
-                            <th className="px-4 py-2 text-left">Task Name</th>
-                            <th className="px-4 py-2 text-left">Description</th>
-                            <th className="px-4 py-2 text-left">Status</th>
-                            <th className="px-4 py-2 text-left">Due Date</th>
-                            <th className="px-4 py-2 text-left">
-                              Assigned User
-                            </th>
-                            <th className="px-4 py-2 text-left">Priority</th>
-                            <th className="px-4 py-2 text-left">Actions</th>
+                            <th className="px-2 py-1 text-left">Task Name</th>
+                            <th className="px-2 py-1 text-left">Description</th>
+                            <th className="px-2 py-1 text-left">Status</th>
+                            <th className="px-2 py-1 text-left">Due Date</th>
+                            <th className="px-2 py-1 text-left">Assigned User</th>
+                            <th className="px-2 py-1 text-left">Priority</th>
+                            <th className="px-2 py-1 text-left">Actions</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -190,31 +189,23 @@ const Project = () => {
                             )
                             .map((task: TaskType) => (
                               <tr key={task.id}>
-                                <td className="px-4 py-2">{task.name}</td>
-                                <td className="px-4 py-2">
-                                  {task.description}
-                                </td>
-                                <td className="px-4 py-2">
+                                <td className="px-2 py-1">{task.name}</td>
+                                <td className="px-2 py-1">{task.description}</td>
+                                <td className="px-2 py-1">
                                   <span
-                                    className={`px-3 py-1 rounded-full  font-semibold ${getStatusColor(
+                                    className={`px-2 py-1 rounded-full font-semibold ${getStatusColor(
                                       task.status
                                     )}`}
                                   >
-                                    {task?.status}
+                                    {task.status}
                                   </span>
                                 </td>
-                                <td className="px-4 py-2">{task.dueDate}</td>
-                                <td className="px-4 py-2">
-                                  {task.assignedUser}
-                                </td>
-                                <td
-                                  className={`px-4 py-2 ${getPriorityColor(
-                                    task.priority
-                                  )}`}
-                                >
+                                <td className="px-2 py-1">{task.dueDate}</td>
+                                <td className="px-2 py-1">{task.assignedUser}</td>
+                                <td className={`px-2 py-1 ${getPriorityColor(task.priority)}`}>
                                   {task.priority}
                                 </td>
-                                <td className="flex gap-4 px-4 py-2 text-lg">
+                                <td className="flex gap-2 px-2 py-1 text-lg">
                                   <FaEye
                                     className="text-blue-500 cursor-pointer"
                                     title="View Task"
@@ -292,25 +283,6 @@ const Project = () => {
               <Input type="date" />
             </Form.Item>
             <Form.Item
-              label="Project End Date"
-              name={["project", "endDate"]}
-              initialValue={currentProject.endDate}
-            >
-              <Input type="date" />
-            </Form.Item>
-            <Form.Item
-              label="Project Status"
-              name={["project", "status"]}
-              initialValue={currentProject.status}
-            >
-              <Select>
-                <Option value="Ongoing">Ongoing</Option>
-                <Option value="Completed">Completed</Option>
-                <Option value="On Hold">On Hold</Option>
-              </Select>
-            </Form.Item>
-
-            <Form.Item
               label="Task Name"
               name={["task", "name"]}
               initialValue={currentTask.name}
@@ -334,7 +306,6 @@ const Project = () => {
                 <Option value="In Progress">In Progress</Option>
                 <Option value="Completed">Completed</Option>
                 <Option value="Review">Review</Option>
-                <Option value="Blocked">Blocked</Option>
               </Select>
             </Form.Item>
             <Form.Item
@@ -357,17 +328,17 @@ const Project = () => {
               initialValue={currentTask.priority}
             >
               <Select>
-                <Option value="Low">Low</Option>
-                <Option value="Medium">Medium</Option>
                 <Option value="High">High</Option>
+                <Option value="Medium">Medium</Option>
+                <Option value="Low">Low</Option>
               </Select>
             </Form.Item>
             <Form.Item>
               <button
                 type="submit"
-                className="px-4 py-2 font-semibold text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+                className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
               >
-                Save Changes
+                Update Project and Task
               </button>
             </Form.Item>
           </Form>
