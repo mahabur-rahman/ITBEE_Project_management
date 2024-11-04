@@ -171,7 +171,7 @@ const Project = () => {
                                 <td className="px-4 py-2">{task.description}</td>
                                 <td className="px-4 py-2">
                                   <span className={`px-3 py-1 rounded-full text-white font-semibold ${getPriorityColor(task.priority)}`}>
-                                    {task.status}
+                                    {task?.status}
                                   </span>
                                 </td>
                                 <td className="px-4 py-2">{task.dueDate}</td>
