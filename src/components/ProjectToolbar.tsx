@@ -23,14 +23,25 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
     setIsModalVisible(true);
   };
 
+
   const handleOk = () => {
     form.validateFields().then((values) => {
-      const newTask = { ...values, id: Date.now(), project: selectedProject };
-      addTask(newTask);
-      setIsModalVisible(false);
-      form.resetFields();
+      const project = projects.find((p) => p.id === selectedProject);
+  
+      if (project) {
+        const existingTaskIds = project.tasks.map((task) => task.id);
+        const newTaskId = existingTaskIds.length > 0 ? Math.max(...existingTaskIds) + 1 : 1; 
+        
+        const newTask = { ...values, id: newTaskId, project: selectedProject };
+        addTask(newTask);
+        setIsModalVisible(false);
+        form.resetFields();
+      } else {
+        message.error("Selected project not found!");
+      }
     });
   };
+  
 
   const handleCancel = () => {
     setIsModalVisible(false);
