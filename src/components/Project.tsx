@@ -107,6 +107,20 @@ const Project = () => {
         return "text-gray-500";
     }
   };
+  const getStatusColor = (priority: string) => {
+    switch (priority) {
+      case "In Progress":
+        return "text-red-600";
+      case "Todo":
+        return "text-yellow-500";
+      case "Completed":
+        return "text-green-400";
+        case "Review":
+        return "text-green-900";
+      default:
+        return "text-gray-500";
+    }
+  };
 
   const handleProjectSelect = (projectId: number) => {
     setSelectedProjectId(projectId);
@@ -170,13 +184,14 @@ const Project = () => {
                                 <td className="px-4 py-2">{task.name}</td>
                                 <td className="px-4 py-2">{task.description}</td>
                                 <td className="px-4 py-2">
-                                  <span className={`px-3 py-1 rounded-full text-white font-semibold ${getPriorityColor(task.priority)}`}>
+                                  <span className={`px-3 py-1 rounded-full  font-semibold ${getStatusColor(task.status)}`}>
                                     {task?.status}
+                                    {/* {task.status ? task.status : 'No Status'} */}
                                   </span>
                                 </td>
                                 <td className="px-4 py-2">{task.dueDate}</td>
                                 <td className="px-4 py-2">{task.assignedUser}</td>
-                                <td className="px-4 py-2">{task.priority}</td>
+                                <td className={`px-4 py-2 ${getPriorityColor(task.priority)}`}>{task.priority}</td>
                                 <td className="flex gap-4 px-4 py-2 text-lg">
                                   <FaEye
                                     className="text-blue-500 cursor-pointer"
