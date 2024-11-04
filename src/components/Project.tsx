@@ -21,7 +21,7 @@ const Project = () => {
   );
   const [currentTask, setCurrentTask] = useState<TaskType | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
 
   const navigate = useNavigate();
 
@@ -104,12 +104,11 @@ const Project = () => {
     }
   };
 
-  // ====================
-  const handleProjectSelect = (projectId) => {
+  const handleProjectSelect = (projectId: number) => {
     setSelectedProjectId(projectId);
   };
 
-  const addTaskToProject = (newTask) => {
+  const addTaskToProject = (newTask: TaskType) => {
     setProjects((prevProjects) =>
       prevProjects.map((project) => {
         if (project.id === selectedProjectId) {

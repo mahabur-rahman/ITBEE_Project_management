@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { Modal, Input, Form, Button, Select, message } from "antd";
 import { projects } from "../data/data";
+import { TaskType } from "../interface/project.interface";
 
 const { Option } = Select;
 
-const ProjectToolbar = ({ addTask, onProjectSelect }) => {
+interface ProjectToolbarProps {
+  addTask: (task: TaskType) => void;
+  onProjectSelect: (projectId: number) => void;
+}
+
+const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [form] = Form.useForm();
@@ -41,12 +47,14 @@ const ProjectToolbar = ({ addTask, onProjectSelect }) => {
             className="mx-4 w-60"
             onChange={(value) => {
               setSelectedProject(value);
-              onProjectSelect(value);
+              if (value !== null) {
+                onProjectSelect(value);
+              }
             }}
             value={selectedProject}
           >
             {projects.map((project) => (
-              <Option key={project.id} value={project.id}>
+              <Option key={project.id} value= {project.id}>
                 {project.name}
               </Option>
             ))}

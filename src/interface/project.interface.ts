@@ -1,4 +1,4 @@
-// TaskType and ProjectType remain the same
+
 export interface TaskType {
   id: number;
   name: string;
@@ -20,7 +20,6 @@ export interface ProjectType {
   tasks: TaskType[];
 }
 
-// TaskFormValues should reflect the structure used in your form
 export interface TaskFormValues {
   project: {
     name: string;
