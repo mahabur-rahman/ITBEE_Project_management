@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal, Input, Form, Button, Select, message } from "antd";
 import { projects } from "../data/data";
 import { TaskType } from "../interface/project.interface";
+import { Link } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -69,7 +70,9 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
   return (
     <>
       <div className="flex items-center justify-between mb-4">
-        <div></div>
+        <div>
+          <Link to="/chart" className="text-3xl font-semibold text-red-500">Chart</Link>
+        </div>
         <div>
           <Select
             placeholder="Select a Project"
