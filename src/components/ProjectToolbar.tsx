@@ -70,9 +70,15 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
   return (
     <>
       <div className="flex items-center justify-between mb-4">
-        <div>
-          <Link to="/chart" className="text-3xl font-semibold text-red-500">Chart</Link>
+        <div className="flex justify-center">
+          <Link
+            to="/chart"
+            className="px-6 py-3 font-semibold text-white transition duration-300 ease-in-out transform bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:scale-105"
+          >
+            Chart View
+          </Link>
         </div>
+
         <div>
           <Select
             placeholder="Select a Project"

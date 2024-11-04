@@ -30,7 +30,10 @@ const GanttChartView: React.FC = () => {
   return (
     <div className="container p-12">
       <div>
-        <Link to="/" className="p-4 text-black bg-gray-300 rounded-sm">
+        <Link
+          to="/"
+          className="px-6 py-3 font-semibold text-white transition duration-300 ease-in-out transform bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:scale-105"
+        >
           Back to Home
         </Link>
         <h1 className="my-5 text-2xl font-bold text-center">Gantt Chart</h1>
