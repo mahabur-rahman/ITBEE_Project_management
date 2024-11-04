@@ -69,8 +69,8 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
 
   return (
     <>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex justify-center">
+      <div className="flex flex-col items-center justify-between mb-4 md:flex-row">
+        <div className="flex justify-center mb-4 md:mb-0">
           <Link
             to="/chart"
             className="px-6 py-3 font-semibold text-white transition duration-300 ease-in-out transform bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:scale-105"
@@ -79,10 +79,10 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
           </Link>
         </div>
 
-        <div>
+        <div className="flex flex-col items-center md:flex-row">
           <Select
             placeholder="Select a Project"
-            className="mx-4 w-60"
+            className="w-full mx-0 mb-2 md:mx-4 md:mb-0 md:w-60"
             onChange={(value) => {
               setSelectedProject(value);
               if (value !== null) {
@@ -97,7 +97,11 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
               </Option>
             ))}
           </Select>
-          <Button type="primary" onClick={showModal}>
+          <Button
+            type="primary"
+            onClick={showModal}
+            className="w-full md:w-auto"
+          >
             + Add Tasks
           </Button>
         </div>
