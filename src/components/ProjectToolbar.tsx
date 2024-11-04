@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { Modal, Input, Form, Button, Select, message } from "antd";
-import { TaskFormValues } from "../interface/project.interface";
 import { projects } from "../data/data";
 
 const { Option } = Select;
 
-const ProjectToolbar = () => {
+const ProjectToolbar = ({ addTask, onProjectSelect }) => { // Accept props
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<string | undefined>(undefined);
-  const [tasks, setTasks] = useState<any[]>([]); // State to hold tasks
+  const [selectedProject, setSelectedProject] = useState(null); // Track selected project
+  const [form] = Form.useForm(); // Form instance
 
   const showModal = () => {
     if (!selectedProject) {
@@ -18,34 +17,35 @@ const ProjectToolbar = () => {
     setIsModalVisible(true);
   };
 
-  const handleOk = (values: TaskFormValues) => {
-    const newTask = { ...values, project: selectedProject, id: Date.now() }; // Create a new task with a unique ID
-    const updatedTasks = [...tasks, newTask]; // Add the new task to the existing tasks
-    setTasks(updatedTasks); // Update the local state
-    console.log("Task added:", newTask);
-
-    setIsModalVisible(false);
-    setSelectedProject(undefined); // Reset selected project after submission
+  const handleOk = () => {
+    form.validateFields().then((values) => {
+      const newTask = { ...values, id: Date.now(), project: selectedProject }; // Create new task
+      addTask(newTask); // Call addTask from Project component
+      setIsModalVisible(false);
+      form.resetFields(); // Reset form fields
+    });
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    setSelectedProject(undefined); // Reset selected project on cancel
+    form.resetFields(); // Reset form fields on cancel
   };
 
   return (
     <>
       <div className="flex items-center justify-between mb-4">
-        <data></data>
         <div>
-          <Select 
-            placeholder="Select a Project" 
-            className="mx-4 w-60" 
-            onChange={(value) => setSelectedProject(value)}
-            value={selectedProject} // Set value to selectedProject
+          <Select
+            placeholder="Select a Project"
+            className="mx-4 w-60"
+            onChange={(value) => {
+              setSelectedProject(value);
+              onProjectSelect(value); // Notify parent about project selection
+            }}
+            value={selectedProject}
           >
             {projects.map((project) => (
-              <Option key={project.id} value={project.name}>
+              <Option key={project.id} value={project.id}>
                 {project.name}
               </Option>
             ))}
@@ -61,12 +61,11 @@ const ProjectToolbar = () => {
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
-        style={{ top: 20 }}
       >
-        <Form layout="vertical" onFinish={handleOk}>
+        <Form form={form} layout="vertical">
           <Form.Item
             label="Task Name"
-            name="taskName"
+            name="name"
             rules={[{ required: true, message: "Please input the task name!" }]}
           >
             <Input placeholder="Enter task name" />
@@ -74,7 +73,7 @@ const ProjectToolbar = () => {
 
           <Form.Item
             label="Task Description"
-            name="taskDescription"
+            name="description"
             rules={[{ required: true, message: "Please input the task description!" }]}
           >
             <Input.TextArea placeholder="Enter task description" />
@@ -98,7 +97,7 @@ const ProjectToolbar = () => {
             name="dueDate"
             rules={[{ required: true, message: "Please select a due date!" }]}
           >
-            <Input type="date" placeholder="Select due date" />
+            <Input type="date" />
           </Form.Item>
 
           <Form.Item
@@ -122,11 +121,7 @@ const ProjectToolbar = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button 
-              type="primary" 
-              htmlType="submit"
-              disabled={!selectedProject} // Disable button if no project is selected
-            >
+            <Button type="primary" onClick={handleOk}>
               Add Task
             </Button>
           </Form.Item>

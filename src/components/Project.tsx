@@ -21,7 +21,8 @@ const Project = () => {
   );
   const [currentTask, setCurrentTask] = useState<TaskType | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
-
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
+  
   const navigate = useNavigate();
 
   const showModal = (project: ProjectType, task: TaskType) => {
@@ -103,10 +104,28 @@ const Project = () => {
     }
   };
 
+
+  // ==================== 
+  const handleProjectSelect = (projectId) => {
+    setSelectedProjectId(projectId); // Update selected project ID
+  };
+
+  const addTaskToProject = (newTask) => {
+    setProjects((prevProjects) =>
+      prevProjects.map((project) => {
+        if (project.id === selectedProjectId) {
+          return { ...project, tasks: [...project.tasks, newTask] }; // Add new task
+        }
+        return project;
+      })
+    );
+  };
+
   return (
     <>
       <div className="p-6">
-        <ProjectToolbar />
+      <ProjectToolbar addTask={addTaskToProject} onProjectSelect={handleProjectSelect} /> {/* Pass props to toolbar */}
+
 
         {/* Search Input */}
         <Input
@@ -178,7 +197,7 @@ const Project = () => {
                                 >
                                   {task.priority}
                                 </td>
-                                <td className="px-4 py-2 flex gap-4 text-lg">
+                                <td className="flex gap-4 px-4 py-2 text-lg">
                                   <FaEye
                                     className="text-blue-500 cursor-pointer"
                                     title="View Task"
