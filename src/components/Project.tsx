@@ -22,7 +22,7 @@ const Project = () => {
   const [currentTask, setCurrentTask] = useState<TaskType | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedProjectId, setSelectedProjectId] = useState(null);
-  
+
   const navigate = useNavigate();
 
   const showModal = (project: ProjectType, task: TaskType) => {
@@ -35,12 +35,12 @@ const Project = () => {
     if (currentProject && currentTask) {
       const updatedProject: ProjectType = {
         ...currentProject,
-        ...values.project, // Spread new project values
+        ...values.project,
       };
 
       const updatedTask: TaskType = {
         ...currentTask,
-        ...values.task, // Spread new task values
+        ...values.task,
       };
 
       const updatedProjects = projects.map((project) => {
@@ -55,9 +55,9 @@ const Project = () => {
         return project;
       });
 
-      setProjects(updatedProjects); // Update state with the new project list
-      setIsModalVisible(false); // Close the modal
-      message.success("Project and Task updated successfully!"); // Success message
+      setProjects(updatedProjects);
+      setIsModalVisible(false);
+      message.success("Project and Task updated successfully!");
     }
   };
 
@@ -88,7 +88,7 @@ const Project = () => {
       return project;
     });
     setProjects(updatedProjects);
-    message.success("Task deleted successfully!"); // Success message
+    message.success("Task deleted successfully!");
   };
 
   const getPriorityColor = (priority: string) => {
@@ -104,17 +104,16 @@ const Project = () => {
     }
   };
 
-
-  // ==================== 
+  // ====================
   const handleProjectSelect = (projectId) => {
-    setSelectedProjectId(projectId); // Update selected project ID
+    setSelectedProjectId(projectId);
   };
 
   const addTaskToProject = (newTask) => {
     setProjects((prevProjects) =>
       prevProjects.map((project) => {
         if (project.id === selectedProjectId) {
-          return { ...project, tasks: [...project.tasks, newTask] }; // Add new task
+          return { ...project, tasks: [...project.tasks, newTask] };
         }
         return project;
       })
@@ -124,10 +123,11 @@ const Project = () => {
   return (
     <>
       <div className="p-6">
-      <ProjectToolbar addTask={addTaskToProject} onProjectSelect={handleProjectSelect} /> {/* Pass props to toolbar */}
+        <ProjectToolbar
+          addTask={addTaskToProject}
+          onProjectSelect={handleProjectSelect}
+        />
 
-
-        {/* Search Input */}
         <Input
           placeholder="Search projects and tasks..."
           value={searchTerm}
@@ -216,8 +216,6 @@ const Project = () => {
                                     className="text-red-500 cursor-pointer"
                                     title="Delete Task"
                                     onClick={() => {
-                                      // Optional: Add confirmation before deletion
-
                                       handleDeleteTask(project.id, task.id);
                                     }}
                                   />

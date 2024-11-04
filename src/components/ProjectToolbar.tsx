@@ -4,10 +4,10 @@ import { projects } from "../data/data";
 
 const { Option } = Select;
 
-const ProjectToolbar = ({ addTask, onProjectSelect }) => { // Accept props
+const ProjectToolbar = ({ addTask, onProjectSelect }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(null); // Track selected project
-  const [form] = Form.useForm(); // Form instance
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [form] = Form.useForm();
 
   const showModal = () => {
     if (!selectedProject) {
@@ -19,28 +19,29 @@ const ProjectToolbar = ({ addTask, onProjectSelect }) => { // Accept props
 
   const handleOk = () => {
     form.validateFields().then((values) => {
-      const newTask = { ...values, id: Date.now(), project: selectedProject }; // Create new task
-      addTask(newTask); // Call addTask from Project component
+      const newTask = { ...values, id: Date.now(), project: selectedProject };
+      addTask(newTask);
       setIsModalVisible(false);
-      form.resetFields(); // Reset form fields
+      form.resetFields();
     });
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    form.resetFields(); // Reset form fields on cancel
+    form.resetFields();
   };
 
   return (
     <>
       <div className="flex items-center justify-between mb-4">
+        <div></div>
         <div>
           <Select
             placeholder="Select a Project"
             className="mx-4 w-60"
             onChange={(value) => {
               setSelectedProject(value);
-              onProjectSelect(value); // Notify parent about project selection
+              onProjectSelect(value);
             }}
             value={selectedProject}
           >
@@ -74,7 +75,9 @@ const ProjectToolbar = ({ addTask, onProjectSelect }) => { // Accept props
           <Form.Item
             label="Task Description"
             name="description"
-            rules={[{ required: true, message: "Please input the task description!" }]}
+            rules={[
+              { required: true, message: "Please input the task description!" },
+            ]}
           >
             <Input.TextArea placeholder="Enter task description" />
           </Form.Item>
@@ -103,7 +106,9 @@ const ProjectToolbar = ({ addTask, onProjectSelect }) => { // Accept props
           <Form.Item
             label="Assigned User"
             name="assignedUser"
-            rules={[{ required: true, message: "Please input the assigned user!" }]}
+            rules={[
+              { required: true, message: "Please input the assigned user!" },
+            ]}
           >
             <Input placeholder="Enter assigned user" />
           </Form.Item>
