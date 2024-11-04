@@ -12,7 +12,7 @@ interface ProjectToolbarProps {
 
 const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const [form] = Form.useForm();
 
   const showModal = () => {
@@ -23,17 +23,25 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
     setIsModalVisible(true);
   };
 
-
   const handleOk = () => {
     form.validateFields().then((values) => {
       const project = projects.find((p) => p.id === selectedProject);
-  
+
       if (project) {
         const existingTaskIds = project.tasks.map((task) => task.id);
-        const newTaskId = existingTaskIds.length > 0 ? Math.max(...existingTaskIds) + 1 : 1; 
-        
+        const newTaskId = existingTaskIds.length > 0 ? Math.max(...existingTaskIds) + 1 : 1;
+
         const newTask = { ...values, id: newTaskId, project: selectedProject };
+        
+        // Call the provided addTask function
         addTask(newTask);
+
+        // Save the new task to localStorage
+        const storedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+        storedTasks.push(newTask);
+        localStorage.setItem("tasks", JSON.stringify(storedTasks));
+
+        // Close the modal and reset the form
         setIsModalVisible(false);
         form.resetFields();
       } else {
@@ -41,7 +49,6 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
       }
     });
   };
-  
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -94,9 +101,7 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
           <Form.Item
             label="Task Description"
             name="description"
-            rules={[
-              { required: true, message: "Please input the task description!" },
-            ]}
+            rules={[{ required: true, message: "Please input the task description!" }]}
           >
             <Input.TextArea placeholder="Enter task description" />
           </Form.Item>
@@ -125,9 +130,7 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
           <Form.Item
             label="Assigned User"
             name="assignedUser"
-            rules={[
-              { required: true, message: "Please input the assigned user!" },
-            ]}
+            rules={[{ required: true, message: "Please input the assigned user!" }]}
           >
             <Input placeholder="Enter assigned user" />
           </Form.Item>
