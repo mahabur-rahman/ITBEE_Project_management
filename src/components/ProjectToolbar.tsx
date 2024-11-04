@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Modal, Input, Form, Button, Select, message } from "antd";
 import { TaskFormValues } from "../interface/project.interface";
 import { projects } from "../data/data";
@@ -8,15 +8,7 @@ const { Option } = Select;
 const ProjectToolbar = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProject, setSelectedProject] = useState<string | undefined>(undefined);
-  const [localTasks, setLocalTasks] = useState<any[]>([]); // State to hold tasks from local storage
-
-  useEffect(() => {
-    // Load tasks from local storage
-    const savedTasks = localStorage.getItem("tasks");
-    if (savedTasks) {
-      setLocalTasks(JSON.parse(savedTasks));
-    }
-  }, []);
+  const [tasks, setTasks] = useState<any[]>([]); // State to hold tasks
 
   const showModal = () => {
     if (!selectedProject) {
@@ -28,11 +20,8 @@ const ProjectToolbar = () => {
 
   const handleOk = (values: TaskFormValues) => {
     const newTask = { ...values, project: selectedProject, id: Date.now() }; // Create a new task with a unique ID
-    const updatedTasks = [...localTasks, newTask]; // Add the new task to the existing tasks
-
-    // Save updated tasks to local storage
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-    setLocalTasks(updatedTasks); // Update the local state
+    const updatedTasks = [...tasks, newTask]; // Add the new task to the existing tasks
+    setTasks(updatedTasks); // Update the local state
     console.log("Task added:", newTask);
 
     setIsModalVisible(false);
@@ -46,12 +35,12 @@ const ProjectToolbar = () => {
 
   return (
     <>
-      <div className="mb-4 flex justify-between items-center">
+      <div className="flex items-center justify-between mb-4">
         <data></data>
         <div>
           <Select 
             placeholder="Select a Project" 
-            className="w-60 mx-4" 
+            className="mx-4 w-60" 
             onChange={(value) => setSelectedProject(value)}
             value={selectedProject} // Set value to selectedProject
           >
