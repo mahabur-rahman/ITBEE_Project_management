@@ -220,8 +220,115 @@ const Project = () => {
         style={{ top: 20 }}
       >
         {currentProject && currentTask && (
-          <Form layout="vertical" onFinish={handleOk}>
-            {/* Form fields for editing project and task */}
+
+         <Form layout="vertical" onFinish={handleOk}>
+            <Form.Item
+              label="Project Name"
+              name={["project", "name"]}
+              initialValue={currentProject.name}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Project Description"
+              name={["project", "description"]}
+              initialValue={currentProject.description}
+            >
+              <Input.TextArea />
+            </Form.Item>
+            <Form.Item
+              label="Project Budget"
+              name={["project", "budget"]}
+              initialValue={currentProject.budget}
+            >
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item
+              label="Project Start Date"
+              name={["project", "startDate"]}
+              initialValue={currentProject.startDate}
+            >
+              <Input type="date" />
+            </Form.Item>
+            <Form.Item
+              label="Project End Date"
+              name={["project", "endDate"]}
+              initialValue={currentProject.endDate}
+            >
+              <Input type="date" />
+            </Form.Item>
+            <Form.Item
+              label="Project Status"
+              name={["project", "status"]}
+              initialValue={currentProject.status}
+            >
+              <Select>
+                <Option value="Ongoing">Ongoing</Option>
+                <Option value="Completed">Completed</Option>
+                <Option value="On Hold">On Hold</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              label="Task Name"
+              name={["task", "name"]}
+              initialValue={currentTask.name}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Task Description"
+              name={["task", "description"]}
+              initialValue={currentTask.description}
+            >
+              <Input.TextArea />
+            </Form.Item>
+            <Form.Item
+              label="Task Status"
+              name={["task", "status"]}
+              initialValue={currentTask.status}
+            >
+              <Select>
+                <Option value="Todo">Todo</Option>
+                <Option value="In Progress">In Progress</Option>
+                <Option value="Completed">Completed</Option>
+                <Option value="Review">Review</Option>
+                <Option value="Blocked">Blocked</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Task Due Date"
+              name={["task", "dueDate"]}
+              initialValue={currentTask.dueDate}
+            >
+              <Input type="date" />
+            </Form.Item>
+            <Form.Item
+              label="Assigned User"
+              name={["task", "assignedUser"]}
+              initialValue={currentTask.assignedUser}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Task Priority"
+              name={["task", "priority"]}
+              initialValue={currentTask.priority}
+            >
+              <Select>
+                <Option value="Low">Low</Option>
+                <Option value="Medium">Medium</Option>
+                <Option value="High">High</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item>
+              <button
+                type="submit"
+                className="px-4 py-2 font-semibold text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+              >
+                Save Changes
+              </button>
+            </Form.Item>
           </Form>
         )}
       </Modal>
