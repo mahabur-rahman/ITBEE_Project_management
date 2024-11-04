@@ -21,7 +21,9 @@ const Project = () => {
   );
   const [currentTask, setCurrentTask] = useState<TaskType | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
+    null
+  );
 
   const navigate = useNavigate();
 
@@ -345,7 +347,10 @@ const Project = () => {
               </Select>
             </Form.Item>
             <Form.Item>
-              <button type="submit" className="btn btn-primary">
+              <button
+                type="submit"
+                className="px-4 py-2 font-semibold text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+              >
                 Save Changes
               </button>
             </Form.Item>

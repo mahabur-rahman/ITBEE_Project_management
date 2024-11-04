@@ -54,7 +54,7 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
             value={selectedProject}
           >
             {projects.map((project) => (
-              <Option key={project.id} value= {project.id}>
+              <Option key={project.id} value={project.id}>
                 {project.name}
               </Option>
             ))}
