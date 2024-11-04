@@ -28,6 +28,16 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
       const projectIndex = projects.findIndex((p) => p.id === selectedProject);
   
       if (projectIndex !== -1) {
+        // Check for duplicate task based on the task name or any other unique property
+        const taskExists = projects[projectIndex].tasks.some(
+          (task) => task.name === values.name // Adjust this condition as needed
+        );
+  
+        if (taskExists) {
+          message.error("A task with this name already exists in the selected project!");
+          return; // Exit the function to prevent adding a duplicate
+        }
+  
         const existingTaskIds = projects[projectIndex].tasks.map((task) => task.id);
         const newTaskId = existingTaskIds.length > 0 ? Math.max(...existingTaskIds) + 1 : 1;
   
@@ -50,6 +60,7 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
       }
     });
   };
+  
   
 
   const handleCancel = () => {
