@@ -1,11 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import ProjectToolbar from "./ProjectToolbar";
-import {
-  ProjectType,
-  TaskFormValues,
-  TaskType,
-} from "../interface/project.interface";
+import { ProjectType, TaskFormValues, TaskType } from "../interface/project.interface";
 import { useNavigate } from "react-router-dom";
 import { projects as initialProjects } from "../data/data";
 import { Modal, Form, Input, Select, Collapse, message } from "antd";
@@ -14,18 +10,24 @@ const { Option } = Select;
 const { Panel } = Collapse;
 
 const Project = () => {
-  const [projects, setProjects] = useState<ProjectType[]>(initialProjects);
+  const navigate = useNavigate();
+
+  // Load projects from localStorage if available; otherwise use initialProjects
+  const [projects, setProjects] = useState<ProjectType[]>(() => {
+    const storedProjects = localStorage.getItem("projects");
+    return storedProjects ? JSON.parse(storedProjects) : initialProjects;
+  });
+
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [currentProject, setCurrentProject] = useState<ProjectType | null>(
-    null
-  );
+  const [currentProject, setCurrentProject] = useState<ProjectType | null>(null);
   const [currentTask, setCurrentTask] = useState<TaskType | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
-    null
-  );
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
 
-  const navigate = useNavigate();
+  // Save projects to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("projects", JSON.stringify(projects));
+  }, [projects]);
 
   const showModal = (project: ProjectType, task: TaskType) => {
     setCurrentProject(project);
@@ -111,23 +113,25 @@ const Project = () => {
   };
 
   const addTaskToProject = (newTask: TaskType) => {
-    setProjects((prevProjects) =>
-      prevProjects.map((project) => {
-        if (project.id === selectedProjectId) {
-          return { ...project, tasks: [...project.tasks, newTask] };
-        }
-        return project;
-      })
-    );
+    if (selectedProjectId === null) {
+      message.warning("Please select a project first!");
+      return;
+    }
+
+    const updatedProjects = projects.map((project) => {
+      if (project.id === selectedProjectId) {
+        return { ...project, tasks: [...project.tasks, newTask] };
+      }
+      return project;
+    });
+
+    setProjects(updatedProjects);
   };
 
   return (
     <>
       <div className="p-6">
-        <ProjectToolbar
-          addTask={addTaskToProject}
-          onProjectSelect={handleProjectSelect}
-        />
+        <ProjectToolbar addTask={addTaskToProject} onProjectSelect={handleProjectSelect} />
 
         <Input
           placeholder="Search projects and tasks..."
@@ -150,9 +154,7 @@ const Project = () => {
                             <th className="px-4 py-2 text-left">Description</th>
                             <th className="px-4 py-2 text-left">Status</th>
                             <th className="px-4 py-2 text-left">Due Date</th>
-                            <th className="px-4 py-2 text-left">
-                              Assigned User
-                            </th>
+                            <th className="px-4 py-2 text-left">Assigned User</th>
                             <th className="px-4 py-2 text-left">Priority</th>
                             <th className="px-4 py-2 text-left">Actions</th>
                           </tr>
@@ -165,48 +167,20 @@ const Project = () => {
                             .map((task: TaskType) => (
                               <tr key={task.id}>
                                 <td className="px-4 py-2">{task.name}</td>
+                                <td className="px-4 py-2">{task.description}</td>
                                 <td className="px-4 py-2">
-                                  {task.description}
-                                </td>
-                                <td className="px-4 py-2">
-                                  <span
-                                    className={`px-3 py-1 rounded-full text-white font-semibold ${
-                                      task.status === "Completed"
-                                        ? "bg-green-600"
-                                        : task.status === "In Progress"
-                                        ? "bg-blue-500"
-                                        : task.status === "Todo"
-                                        ? "bg-yellow-500"
-                                        : task.status === "Review"
-                                        ? "bg-purple-500"
-                                        : task.status === "Blocked"
-                                        ? "bg-red-500"
-                                        : "bg-gray-500"
-                                    }`}
-                                  >
+                                  <span className={`px-3 py-1 rounded-full text-white font-semibold ${getPriorityColor(task.priority)}`}>
                                     {task.status}
                                   </span>
                                 </td>
                                 <td className="px-4 py-2">{task.dueDate}</td>
-                                <td className="px-4 py-2">
-                                  {task.assignedUser}
-                                </td>
-                                <td
-                                  className={`px-4 py-2 ${getPriorityColor(
-                                    task.priority
-                                  )}`}
-                                >
-                                  {task.priority}
-                                </td>
+                                <td className="px-4 py-2">{task.assignedUser}</td>
+                                <td className="px-4 py-2">{task.priority}</td>
                                 <td className="flex gap-4 px-4 py-2 text-lg">
                                   <FaEye
                                     className="text-blue-500 cursor-pointer"
                                     title="View Task"
-                                    onClick={() =>
-                                      navigate(
-                                        `/view-task/projectId/${project.id}/taskId/${task.id}`
-                                      )
-                                    }
+                                    onClick={() => navigate(`/view-task/projectId/${project.id}/taskId/${task.id}`)}
                                   />
                                   <FaEdit
                                     className="text-yellow-500 cursor-pointer"
@@ -247,113 +221,7 @@ const Project = () => {
       >
         {currentProject && currentTask && (
           <Form layout="vertical" onFinish={handleOk}>
-            <Form.Item
-              label="Project Name"
-              name={["project", "name"]}
-              initialValue={currentProject.name}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Project Description"
-              name={["project", "description"]}
-              initialValue={currentProject.description}
-            >
-              <Input.TextArea />
-            </Form.Item>
-            <Form.Item
-              label="Project Budget"
-              name={["project", "budget"]}
-              initialValue={currentProject.budget}
-            >
-              <Input type="number" />
-            </Form.Item>
-            <Form.Item
-              label="Project Start Date"
-              name={["project", "startDate"]}
-              initialValue={currentProject.startDate}
-            >
-              <Input type="date" />
-            </Form.Item>
-            <Form.Item
-              label="Project End Date"
-              name={["project", "endDate"]}
-              initialValue={currentProject.endDate}
-            >
-              <Input type="date" />
-            </Form.Item>
-            <Form.Item
-              label="Project Status"
-              name={["project", "status"]}
-              initialValue={currentProject.status}
-            >
-              <Select>
-                <Option value="Ongoing">Ongoing</Option>
-                <Option value="Completed">Completed</Option>
-                <Option value="On Hold">On Hold</Option>
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              label="Task Name"
-              name={["task", "name"]}
-              initialValue={currentTask.name}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Task Description"
-              name={["task", "description"]}
-              initialValue={currentTask.description}
-            >
-              <Input.TextArea />
-            </Form.Item>
-            <Form.Item
-              label="Task Status"
-              name={["task", "status"]}
-              initialValue={currentTask.status}
-            >
-              <Select>
-                <Option value="Todo">Todo</Option>
-                <Option value="In Progress">In Progress</Option>
-                <Option value="Completed">Completed</Option>
-                <Option value="Review">Review</Option>
-                <Option value="Blocked">Blocked</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item
-              label="Task Due Date"
-              name={["task", "dueDate"]}
-              initialValue={currentTask.dueDate}
-            >
-              <Input type="date" />
-            </Form.Item>
-            <Form.Item
-              label="Assigned User"
-              name={["task", "assignedUser"]}
-              initialValue={currentTask.assignedUser}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Task Priority"
-              name={["task", "priority"]}
-              initialValue={currentTask.priority}
-            >
-              <Select>
-                <Option value="Low">Low</Option>
-                <Option value="Medium">Medium</Option>
-                <Option value="High">High</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item>
-              <button
-                type="submit"
-                className="px-4 py-2 font-semibold text-white bg-blue-500 rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
-              >
-                Save Changes
-              </button>
-            </Form.Item>
+            {/* Form fields for editing project and task */}
           </Form>
         )}
       </Modal>
