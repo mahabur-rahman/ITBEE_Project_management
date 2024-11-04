@@ -25,22 +25,23 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
 
   const handleOk = () => {
     form.validateFields().then((values) => {
-      const project = projects.find((p) => p.id === selectedProject);
-
-      if (project) {
-        const existingTaskIds = project.tasks.map((task) => task.id);
+      const projectIndex = projects.findIndex((p) => p.id === selectedProject);
+  
+      if (projectIndex !== -1) {
+        const existingTaskIds = projects[projectIndex].tasks.map((task) => task.id);
         const newTaskId = existingTaskIds.length > 0 ? Math.max(...existingTaskIds) + 1 : 1;
-
-        const newTask = { ...values, id: newTaskId, project: selectedProject };
-        
+  
+        const newTask = { ...values, id: newTaskId };
+  
+        // Update the project tasks
+        projects[projectIndex].tasks.push(newTask);
+  
         // Call the provided addTask function
         addTask(newTask);
-
-        // Save the new task to localStorage
-        const storedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-        storedTasks.push(newTask);
-        localStorage.setItem("tasks", JSON.stringify(storedTasks));
-
+  
+        // Save the updated projects array to localStorage
+        localStorage.setItem("projects", JSON.stringify(projects));
+  
         // Close the modal and reset the form
         setIsModalVisible(false);
         form.resetFields();
@@ -49,6 +50,7 @@ const ProjectToolbar = ({ addTask, onProjectSelect }: ProjectToolbarProps) => {
       }
     });
   };
+  
 
   const handleCancel = () => {
     setIsModalVisible(false);

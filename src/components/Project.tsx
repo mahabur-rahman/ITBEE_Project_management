@@ -117,17 +117,18 @@ const Project = () => {
       message.warning("Please select a project first!");
       return;
     }
-
-    const updatedProjects = projects.map((project) => {
-      if (project.id === selectedProjectId) {
-        return { ...project, tasks: [...project.tasks, newTask] };
-      }
-      return project;
-    });
-
-    setProjects(updatedProjects);
+  
+    // Update the projects array by adding the new task to the selected project's tasks
+    setProjects((prevProjects) =>
+      prevProjects.map((project) => {
+        if (project.id === selectedProjectId) {
+          return { ...project, tasks: [...project.tasks, newTask] };
+        }
+        return project;
+      })
+    );
   };
-
+  
   return (
     <>
       <div className="p-6">
